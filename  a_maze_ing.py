@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, IO
 
 
 class MazeGenerator:
@@ -6,37 +6,26 @@ class MazeGenerator:
     Générateur de labyrinthe.
     Chaque cellule est un entier (0-15) représentant les murs (N, E, S, W).
     """
-    def __init__(
-        self,
-        width: int,
-        height: int,
-        entry: Tuple[int, int],
-        exit: Tuple[int, int],
-        output_file: str,
-        perfect: bool,
-        seed: Optional[int] = None
-    ) -> None:
+    def __init__(self) -> None:
         """
-        Initialise le générateur de labyrinthe.
-        :param width: largeur du labyrinthe
-        :param height: hauteur du labyrinthe
-        :param entry: coordonnées d'entrée (x, y)
-        :param exit: coordonnées de sortie (x, y)
-        :param output_file: nom du fichier de sortie
-        :param perfect: True si le labyrinthe doit être parfait
-        :param seed: graine aléatoire (optionnelle)
+        Initialise le générateur de labyrinthe (attributs vides, à remplir via load_config).
         """
-        self._width: int = width
-        self._height: int = height
-        self._entry: Tuple[int, int] = entry
-        self._exit: Tuple[int, int] = exit
-        self._output_file: str = output_file
-        self._perfect: bool = perfect
-        self._seed: Optional[int] = seed
-        # Matrice initialisée à 0 (tous murs ouverts)
-        self._maze: List[List[int]] = [
-            [0 for _ in range(width)] for _ in range(height)
-        ]
+        self._width: int = 0
+        self._height: int = 0
+        self._entry: Tuple[int, int] = (0, 0)
+        self._exit: Tuple[int, int] = (0, 0)
+        self._output_file: str = ""
+        self._perfect: bool = False
+        self._seed: Optional[int] = None
+        self._maze: List[List[int]] = []
+
+    def load_config(self, file: IO[str]) -> None:
+        """
+        Charge la configuration depuis un fichier ouvert (config.txt).
+        Remplit les attributs width, height, entry, exit, output_file, perfect, seed.
+        Initialise la matrice du labyrinthe à 0.
+        """
+        pass
 
 
 def main() -> None:
