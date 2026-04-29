@@ -2,10 +2,10 @@
 
 
 ## Jour 1 : Setup & Architecture
-- [ ] **[Global]** Initialisation du repo Git et du `.gitignore` (Python, Bytecode, venv)
-- [ ] **[nadoho]** Définir la classe `MazeGenerator` et la structure de données (ex: matrice d'entiers)
-- [ ] **[tfrances]** Créer le parseur pour `config.txt` (gestion des clés WIDTH, HEIGHT, etc.)
-- [ ] **[tfrances]** Gérer les erreurs de configuration (valeurs invalides, fichier manquant)
+- [*] **[Global]** Initialisation du repo Git et du `.gitignore` (Python, Bytecode, venv)
+- [*] **[nadoho]** Définir la classe `MazeGenerator` et la structure de données (ex: matrice d'entiers)
+- [*] **[tfrances]** Créer le parseur pour `config.txt` (gestion des clés WIDTH, HEIGHT, etc.)
+- [*] **[tfrances]** Gérer les erreurs de configuration (valeurs invalides, fichier manquant)
 
 ## Jour 2 : Cœur de la Génération
 - [ ] **[nadoho]** Implémenter le Recursive Backtracker itératif (avec une stack pour éviter les RecursionError)

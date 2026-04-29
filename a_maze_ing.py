@@ -1,4 +1,5 @@
-from typing import List, Tuple, Optional, IO
+import random
+from typing import List, Tuple, Optional, Set
 
 
 class MazeGenerator:
@@ -6,7 +7,7 @@ class MazeGenerator:
     Générateur de labyrinthe.
     Chaque cellule est un entier (0-15) représentant les murs (N, E, S, W).
     """
-    def __init__(self, file_name: IO[str]) -> None:
+    def __init__(self, file_name: str) -> None:
         """
         Initialise le générateur de labyrinthe.
         """
@@ -28,7 +29,7 @@ class MazeGenerator:
         }
         self.load_config(file_name)
 
-    def load_config(self, file_name: IO[str]) -> None:
+    def load_config(self, file_name: str) -> None:
         """
         Charge la configuration depuis un fichier (config.txt).
         Remplit les attributs (voir fonction init)
@@ -102,11 +103,53 @@ class MazeGenerator:
 
             # Initialize maze
             self._maze = [
-                [0 for _ in range(self._width)] for _ in range(self._height)
+                [15 for _ in range(self._width)] for _ in range(self._height)
             ]
 
         except FileNotFoundError:
             raise FileNotFoundError(f"Error: {file_name} file not found")
+
+    def _maze_generator(self) -> None:
+        """
+        Génère le labyrinthe par backtracking (DFS).
+        """
+        DIRECTIONS = {
+            "N": ((-1, 0), 1, 4),
+            "E": ((0, 1), 2, 8),
+            "S": ((1, 0), 4, 1),
+            "W": ((0, -1), 8, 2)
+        }
+        stack: List[Tuple[int, int]] = [self._entry]
+        visited: Set[Tuple[int, int]] = {self._entry}
+
+        while stack:
+            current_x, current_y = stack[-1]
+            neighbors: List = []
+            for direction, \
+                (offets, bit_current, bit_neighbor) in DIRECTIONS.items():
+                dx, dy = offets
+                nx, ny = current_x + dx, current_y + dy
+
+                if 0 <= nx < self._height and 0 <= ny < self._width:
+                    if (nx, ny) not in visited:
+                        neighbors.append((nx, ny, bit_current, bit_neighbor))
+            if neighbors:
+                nx, ny, b_curr, b_next = random.choice(neighbors)
+                self._maze[current_x][current_y] &= ~b_curr
+                self._maze[nx][ny] &= ~b_next
+                visited.add((nx, ny))
+                stack.append((nx, ny))
+            else:
+                stack.pop()
+
+    def _output_data(self) -> None:
+        """
+        Cette fonction
+        a pour but de suvegareder le donees dans le fichier de sortie
+        """
+        pass
+
+
 
 
 def main() -> None:
@@ -114,6 +157,8 @@ def main() -> None:
         maze_gen = MazeGenerator("config.txt")
         print("Configuration loaded successfully.")
         print(maze_gen.__dict__)
+        maze_gen._maze_generator()
+        print(maze_gen._maze)
     except (ValueError, FileNotFoundError) as e:
         print(e)
         return
