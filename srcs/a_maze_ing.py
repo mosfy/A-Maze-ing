@@ -1,7 +1,17 @@
 import random
 from typing import List, Tuple, Optional, Set
 
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
+# [0, 1, 1, 1, 1, 1, 1, 1]
 
+
+# x, y
 class MazeGenerator:
     """
     Générateur de labyrinthe.
