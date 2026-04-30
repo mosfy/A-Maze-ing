@@ -238,12 +238,22 @@ class MazeGenerator:
                 raise ValueError(f"Invalid move from {(pr, pc)} to {(r, c)}")
         self._path_str = "".join(dirs)
 
-    def _output_data(self) -> None:
+    def _output_data(self, file_name:str = "output.txt") -> None:
         """
         Cette fonction
         a pour but de sauvegarder les données dans le fichier de sortie
         """
-        pass
+        try:
+            with open(file_name, "w", encoding="utf-8") as file_handle:
+                for line in self._maze:
+                    line_hex = [format(i, "X") for i in line]
+                    file_handle.write("".join(line_hex) + "\n")
+                file_handle.write("\n")
+                file_handle.write(",".join(str(x) for x in self._entry) + "\n")
+                file_handle.write(",".join(str(x) for x in self._exit) + "\n")
+                file_handle.write(self._path_str)
+        except OSError as err:
+            print(err)
 
 
 def main() -> None:
@@ -258,6 +268,7 @@ def main() -> None:
         print(maze_gen._path)
         maze_gen.convert()
         print(maze_gen._path_str)
+        maze_gen._output_data()
     except (ValueError, FileNotFoundError) as e:
         print(e)
         return
