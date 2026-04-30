@@ -1,5 +1,5 @@
 import random
-from typing import List, Tuple, Optional, Set, Dict
+from typing import List, Tuple, Optional, Set, Dict, AnyStr
 
 
 class MazeGenerator:
@@ -26,6 +26,7 @@ class MazeGenerator:
             "W": ((0, -1), 8, 2)
         }
         self._path: List[Tuple[int, int]] = []
+        self._path_str: AnyStr = ""
         self._REQUIRED_KEYS = {
             "WIDTH",
             "HEIGHT",
@@ -201,6 +202,32 @@ class MazeGenerator:
             step = parent.get(step)
         self._path = path[::-1]
 
+    def convert(self) -> None:
+        """
+        Converti le chemin en chaine de caractere
+        """
+        if not self._path:
+            self._path_str = ""
+            return
+
+        dirs: List[str] = []
+        for i, (r, c) in enumerate(self._path):
+            if i == 0:
+                continue
+            pr, pc = self._path[i - 1]
+            dr, dc = r - pr, c - pc
+            if (dr, dc) == (-1, 0):
+                dirs.append("N")
+            elif (dr, dc) == (1, 0):
+                dirs.append("S")
+            elif (dr, dc) == (0, 1):
+                dirs.append("E")
+            elif (dr, dc) == (0, -1):
+                dirs.append("W")
+            else:
+                raise ValueError(f"Invalid move from {(pr, pc)} to {(r, c)}")
+        self._path_str = "".join(dirs)
+
     def _output_data(self) -> None:
         """
         Cette fonction
@@ -219,6 +246,8 @@ def main() -> None:
         print("Solving maze...")
         maze_gen._solve_maze()
         print(maze_gen._path)
+        maze_gen.convert()
+        print(maze_gen._path_str)
     except (ValueError, FileNotFoundError) as e:
         print(e)
         return

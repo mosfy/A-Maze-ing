@@ -14,7 +14,7 @@
 - [ ] **[tfrances]** Système de navigation de base (boucle d'entrée utilisateur)
 
 ## Jour 3 : Algorithmes Spécifiques & Motif 42
-- [ ] **[nadoho]** Algorithme de résolution (BFS ou Dijkstra) pour trouver le chemin le plus court
+- [*] **[nadoho]** Algorithme de résolution (BFS ou Dijkstra) pour trouver le chemin le plus court
 - [ ] **[tfrances]** Implémenter le motif "42" (marquer les cellules comme bloquées avant la génération)
 - [ ] **[tfrances]** Vérifier la contrainte "pas de zone ouverte 3x3"
 - [ ] **[nadoho]** Conversion du chemin trouvé en format textuel (N, E, S, W)
