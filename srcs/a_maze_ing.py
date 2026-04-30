@@ -1,17 +1,8 @@
+import sys
 import random
 from typing import List, Tuple, Optional, Set, Dict
 
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
-# [0, 1, 1, 1, 1, 1, 1, 1]
 
-
-# x, y
 class MazeGenerator:
     """
     Générateur de labyrinthe.
@@ -45,9 +36,9 @@ class MazeGenerator:
             "OUTPUT_FILE",
             "PERFECT",
         }
-        self.load_config(file_name)
+        self.load_config()
 
-    def load_config(self, file_name: str) -> None:
+    def load_config(self) -> None:
         """
         Charge la configuration depuis un fichier (config.txt).
         Remplit les attributs (voir fonction init)
@@ -55,7 +46,7 @@ class MazeGenerator:
         """
         parameters = {}
         try:
-            with open(file_name, "r") as f:
+            with open(sys.argv[1], "r") as f:
                 contenu = f.read()
                 for line in contenu.split():
                     if "=" in line:
@@ -125,7 +116,7 @@ class MazeGenerator:
             ]
 
         except FileNotFoundError:
-            raise FileNotFoundError(f"Error: {file_name} file not found")
+            raise FileNotFoundError("Error: file not found")
 
     def _maze_generator(self) -> None:
         """
@@ -238,7 +229,7 @@ class MazeGenerator:
                 raise ValueError(f"Invalid move from {(pr, pc)} to {(r, c)}")
         self._path_str = "".join(dirs)
 
-    def _output_data(self, file_name:str = "output.txt") -> None:
+    def _output_data(self, file_name: str = "output.txt") -> None:
         """
         Cette fonction
         a pour but de sauvegarder les données dans le fichier de sortie
