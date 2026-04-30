@@ -258,17 +258,17 @@ class MazeGenerator:
 
 def main() -> None:
     try:
-        maze_gen = MazeGenerator("config.txt")
-        print("Configuration loaded successfully.")
-        print(maze_gen.__dict__)
-        maze_gen._maze_generator()
-        print(maze_gen._maze)
-        print("Solving maze...")
-        maze_gen._solve_maze()
-        print(maze_gen._path)
-        maze_gen.convert()
-        print(maze_gen._path_str)
-        maze_gen._output_data()
+        while (True):
+            print("===A-Maze-ing===")
+            print("1. Re-generate a new maze")
+            print("2. Show Hide path from entry to exit")
+            print("3. Rotate maze colors")
+            print("4. Quit")
+            choice = input("choice? (1-4)")
+            if choice == "1":
+                pass
+            if choice == "2":
+
     except (ValueError, FileNotFoundError) as e:
         print(e)
         return

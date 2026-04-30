@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    visualizer.py                                      :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: tfrances <tfrances@student.42lehavre.fr>   +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/30 03:28:37 by tfrances          #+#    #+#              #
-#    Updated: 2026/04/30 04:18:56 by tfrances         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 from color_enum import Color
 
 
@@ -34,14 +22,25 @@ class Visualizer():
             content = f.read()
         number_n = 0
         res = ""
+        coord_entry = tuple()
+        coord_exit = 
+        is_maze = True
         for char in content:
-            if char == "\n":
-                number_n += 1
+            if is_maze:
+                if char == "\n":
+                    number_n += 1
+                else:
+                    number_n = 0
+                if number_n == 2:
+                    is_maze = False
+                res += char
             else:
-                number_n = 0
-            if number_n == 2:
-                break
-            res += char
+                if char == "\n":
+                    number_n += 1
+                if number_n == 3:
+                    
+                
+                
 
         self.encoded_maze = res.split("\n")
         self.encoded_maze.pop()
