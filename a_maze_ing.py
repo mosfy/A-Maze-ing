@@ -25,7 +25,7 @@ class MazeGenerator:
             "S": ((1, 0), 4, 1),
             "W": ((0, -1), 8, 2)
         }
-        self._path: Dict[Tuple[int, int]] = {}
+        self._path: List[Tuple[int, int]] = []
         self._REQUIRED_KEYS = {
             "WIDTH",
             "HEIGHT",
@@ -129,7 +129,8 @@ class MazeGenerator:
         while stack:
             current_x, current_y = stack[-1]
             neighbors: List = []
-            for (offsets, bit_current, bit_neighbor) in self._DIRECTIONS.values():
+            for (offsets, bit_current, bit_neighbor) in \
+                    self._DIRECTIONS.values():
                 dx, dy = offsets
                 nx, ny = current_x + dx, current_y + dy
 
@@ -169,7 +170,7 @@ class MazeGenerator:
         """
         queue: List[Tuple[int, int]] = [self._entry]
         visited: Set[Tuple[int, int]] = {self._entry}
-        parent: Dict[Tuple[int, int], Tuple[int, int] | None] = {
+        parent: Dict[Tuple[int, int], Optional[Tuple[int, int]]] = {
             self._entry: None
         }
 
@@ -177,30 +178,27 @@ class MazeGenerator:
             current_x, current_y = queue.pop(0)
             if (current_x, current_y) == self._exit:
                 break
-            for (offsets, bit_current, bit_neighbor) in self._DIRECTIONS.values():
+            for (offsets, bit_current, bit_neighbor) in \
+                    self._DIRECTIONS.values():
                 dx, dy = offsets
                 nx, ny = current_x + dx, current_y + dy
                 if 0 <= nx < self._height and 0 <= ny < self._width:
-                    if not(self._maze[current_x][current_y] & bit_current) \
-                    and (nx, ny) not in visited:
+                    if not (self._maze[current_x][current_y] & bit_current) \
+                            and (nx, ny) not in visited:
                         visited.add((nx, ny))
                         parent[(nx, ny)] = (current_x, current_y)
                         queue.append((nx, ny))
-        
-        self._path = parent
+
         if self._exit not in self._path:
             print("No path found.")
             return
 
-        path = []
-        current = self._exit
-        while current != self._entry:
-            path.append(current)
-            current = self._path[current]
-        path.append(self._entry)
-        path.reverse()
-        self._path = path
-
+        path: List[Tuple[int, int]] = []
+        step: Optional[Tuple[int, int]] = self._exit
+        while step is not None:
+            path.append(step)
+            step = parent[step]
+        self._path = path[::-1]
 
     def _output_data(self) -> None:
         """
@@ -217,6 +215,9 @@ def main() -> None:
         print(maze_gen.__dict__)
         maze_gen._maze_generator()
         print(maze_gen._maze)
+        print("Solving maze...")
+        maze_gen._solve_maze()
+        print(maze_gen._path)
     except (ValueError, FileNotFoundError) as e:
         print(e)
         return
