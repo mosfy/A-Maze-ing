@@ -113,6 +113,9 @@ class MazeGenerator:
         """
         Génère le labyrinthe par backtracking (DFS).
         """
+        if self._seed is not None:
+            random.seed(self._seed)
+
         DIRECTIONS = {
             "N": ((-1, 0), 1, 4),
             "E": ((0, 1), 2, 8),
@@ -125,9 +128,8 @@ class MazeGenerator:
         while stack:
             current_x, current_y = stack[-1]
             neighbors: List = []
-            for direction, \
-                (offets, bit_current, bit_neighbor) in DIRECTIONS.items():
-                dx, dy = offets
+            for (offsets, bit_current, bit_neighbor) in DIRECTIONS.values():
+                dx, dy = offsets
                 nx, ny = current_x + dx, current_y + dy
 
                 if 0 <= nx < self._height and 0 <= ny < self._width:
@@ -142,14 +144,30 @@ class MazeGenerator:
             else:
                 stack.pop()
 
+        if not self._perfect:
+            self._make_imperfect()
+
+    def _make_imperfect(self, chance: float = 0.05) -> None:
+        """
+        Supprime aléatoirement des murs pour créer des cycles.
+        """
+        for r in range(self._height):
+            for c in range(self._width):
+                if c < self._width - 1 and (self._maze[r][c] & 2):
+                    if random.random() < chance:
+                        self._maze[r][c] &= ~2
+                        self._maze[r][c + 1] &= ~8
+                if r < self._height - 1 and (self._maze[r][c] & 4):
+                    if random.random() < chance:
+                        self._maze[r][c] &= ~4
+                        self._maze[r + 1][c] &= ~1
+
     def _output_data(self) -> None:
         """
         Cette fonction
-        a pour but de suvegareder le donees dans le fichier de sortie
+        a pour but de sauvegarder les données dans le fichier de sortie
         """
         pass
-
-
 
 
 def main() -> None:
