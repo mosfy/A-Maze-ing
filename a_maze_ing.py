@@ -189,15 +189,16 @@ class MazeGenerator:
                         parent[(nx, ny)] = (current_x, current_y)
                         queue.append((nx, ny))
 
-        if self._exit not in self._path:
+        if self._exit not in parent:
             print("No path found.")
+            self._path = []
             return
 
         path: List[Tuple[int, int]] = []
         step: Optional[Tuple[int, int]] = self._exit
         while step is not None:
             path.append(step)
-            step = parent[step]
+            step = parent.get(step)
         self._path = path[::-1]
 
     def _output_data(self) -> None:
