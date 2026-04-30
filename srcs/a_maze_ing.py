@@ -1,5 +1,5 @@
 import random
-from typing import List, Tuple, Optional, Set, Dict, AnyStr
+from typing import List, Tuple, Optional, Set, Dict
 
 # [0, 1, 1, 1, 1, 1, 1, 1]
 # [0, 1, 1, 1, 1, 1, 1, 1]
@@ -36,7 +36,7 @@ class MazeGenerator:
             "W": ((0, -1), 8, 2)
         }
         self._path: List[Tuple[int, int]] = []
-        self._path_str: AnyStr = ""
+        self._path_str: str = ""
         self._REQUIRED_KEYS = {
             "WIDTH",
             "HEIGHT",
