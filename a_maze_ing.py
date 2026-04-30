@@ -1,5 +1,5 @@
 import random
-from typing import List, Tuple, Optional, Set
+from typing import List, Tuple, Optional, Set, Dict
 
 
 class MazeGenerator:
@@ -19,6 +19,13 @@ class MazeGenerator:
         self._perfect: bool = False
         self._seed: Optional[int] = None
         self._maze: List[List[int]] = []
+        self._DIRECTIONS = {
+            "N": ((-1, 0), 1, 4),
+            "E": ((0, 1), 2, 8),
+            "S": ((1, 0), 4, 1),
+            "W": ((0, -1), 8, 2)
+        }
+        self._path: Dict[Tuple[int, int]] = {}
         self._REQUIRED_KEYS = {
             "WIDTH",
             "HEIGHT",
@@ -116,19 +123,13 @@ class MazeGenerator:
         if self._seed is not None:
             random.seed(self._seed)
 
-        DIRECTIONS = {
-            "N": ((-1, 0), 1, 4),
-            "E": ((0, 1), 2, 8),
-            "S": ((1, 0), 4, 1),
-            "W": ((0, -1), 8, 2)
-        }
         stack: List[Tuple[int, int]] = [self._entry]
         visited: Set[Tuple[int, int]] = {self._entry}
 
         while stack:
             current_x, current_y = stack[-1]
             neighbors: List = []
-            for (offsets, bit_current, bit_neighbor) in DIRECTIONS.values():
+            for (offsets, bit_current, bit_neighbor) in self._DIRECTIONS.values():
                 dx, dy = offsets
                 nx, ny = current_x + dx, current_y + dy
 
@@ -161,6 +162,45 @@ class MazeGenerator:
                     if random.random() < chance:
                         self._maze[r][c] &= ~4
                         self._maze[r + 1][c] &= ~1
+
+    def _solve_maze(self) -> None:
+        """
+        Résout le labyrinthe en trouvant le chemin le plus court.
+        """
+        queue: List[Tuple[int, int]] = [self._entry]
+        visited: Set[Tuple[int, int]] = {self._entry}
+        parent: Dict[Tuple[int, int], Tuple[int, int] | None] = {
+            self._entry: None
+        }
+
+        while queue:
+            current_x, current_y = queue.pop(0)
+            if (current_x, current_y) == self._exit:
+                break
+            for (offsets, bit_current, bit_neighbor) in self._DIRECTIONS.values():
+                dx, dy = offsets
+                nx, ny = current_x + dx, current_y + dy
+                if 0 <= nx < self._height and 0 <= ny < self._width:
+                    if not(self._maze[current_x][current_y] & bit_current) \
+                    and (nx, ny) not in visited:
+                        visited.add((nx, ny))
+                        parent[(nx, ny)] = (current_x, current_y)
+                        queue.append((nx, ny))
+        
+        self._path = parent
+        if self._exit not in self._path:
+            print("No path found.")
+            return
+
+        path = []
+        current = self._exit
+        while current != self._entry:
+            path.append(current)
+            current = self._path[current]
+        path.append(self._entry)
+        path.reverse()
+        self._path = path
+
 
     def _output_data(self) -> None:
         """

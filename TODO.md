@@ -8,8 +8,8 @@
 - [*] **[tfrances]** Gérer les erreurs de configuration (valeurs invalides, fichier manquant)
 
 ## Jour 2 : Cœur de la Génération
-- [ ] **[nadoho]** Implémenter le Recursive Backtracker itératif (avec une stack pour éviter les RecursionError)
-- [ ] **[nadoho]** Intégrer le système de seed pour la reproductibilité
+- [*] **[nadoho]** Implémenter le Recursive Backtracker itératif (avec une stack pour éviter les RecursionError)
+- [*] **[nadoho]** Intégrer le système de seed pour la reproductibilité
 - [ ] **[tfrances]** Premier rendu ASCII simple dans le terminal pour visualiser la grille
 - [ ] **[tfrances]** Système de navigation de base (boucle d'entrée utilisateur)
 
