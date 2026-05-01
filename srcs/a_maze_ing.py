@@ -38,6 +38,7 @@ class MazeGenerator:
             "OUTPUT_FILE",
             "PERFECT",
         }
+        self._pattern_42: Set[Tuple[int, int]] = set()
         self.load_config()
 
     def load_config(self) -> None:
@@ -120,6 +121,46 @@ class MazeGenerator:
         except FileNotFoundError:
             raise FileNotFoundError("Error: file not found")
 
+    def _add_42_pattern(self) -> Set[Tuple[int, int]]:
+        pattern_cells = set()
+        if self._width < 9 or self._height < 7:
+            print("Error: Maze size too small to draw '42' pattern.")
+            return pattern_cells
+
+        start_r = (self._height - 5) // 2
+        start_c = (self._width - 7) // 2
+
+        p4 = [(0,0), (0,2), (1,0), (1,2), (2,0), (2,1), (2,2), (3,2), (4,2)]
+        p2 = [(0,4), (0,5), (0,6), (1,6), (2,4), (2,5), (2,6), (3,4), (4,4), (4,5), (4,6)]
+
+        for r, c in p4 + p2:
+            pr, pc = start_r + r, start_c + c
+            if (pr, pc) == self._entry or (pr, pc) == self._exit:
+                print("Error: '42' pattern overlaps with ENTRY or EXIT. Omitting pattern.")
+                return set()
+            pattern_cells.add((pr, pc))
+        return pattern_cells
+
+    def _is_3x3_open_area_at(self, r: int, c: int) -> bool:
+        if r + 2 >= self._height or c + 2 >= self._width:
+            return False
+        for i in range(3):
+            for j in range(2):
+                if self._maze[r+i][c+j] & 2:
+                    return False
+        for i in range(2):
+            for j in range(3):
+                if self._maze[r+i][c+j] & 4:
+                    return False
+        return True
+
+    def _has_3x3_open_area_involving(self, r: int, c: int) -> bool:
+        for i in range(max(0, r-2), min(self._height-2, r+1)):
+            for j in range(max(0, c-2), min(self._width-2, c+1)):
+                if self._is_3x3_open_area_at(i, j):
+                    return True
+        return False
+
     def _maze_generator(self) -> None:
         """
         Génère le labyrinthe par backtracking (DFS).
@@ -127,8 +168,10 @@ class MazeGenerator:
         # if self._seed:
         #     random.seed(self._seed)
 
+        self._pattern_42 = self._add_42_pattern()
+
         stack: List[Tuple[int, int]] = [self._entry]
-        visited: Set[Tuple[int, int]] = {self._entry}
+        visited: Set[Tuple[int, int]] = {self._entry} | self._pattern_42
 
         while stack:
             current_x, current_y = stack[-1]
@@ -159,14 +202,22 @@ class MazeGenerator:
         """
         for r in range(self._height):
             for c in range(self._width):
+                if (r, c) in self._pattern_42:
+                    continue
                 if c < self._width - 1 and (self._maze[r][c] & 2):
-                    if random.random() < chance:
+                    if (r, c + 1) not in self._pattern_42 and random.random() < chance:
                         self._maze[r][c] &= ~2
                         self._maze[r][c + 1] &= ~8
+                        if self._has_3x3_open_area_involving(r, c) or self._has_3x3_open_area_involving(r, c + 1):
+                            self._maze[r][c] |= 2
+                            self._maze[r][c + 1] |= 8
                 if r < self._height - 1 and (self._maze[r][c] & 4):
-                    if random.random() < chance:
+                    if (r + 1, c) not in self._pattern_42 and random.random() < chance:
                         self._maze[r][c] &= ~4
                         self._maze[r + 1][c] &= ~1
+                        if self._has_3x3_open_area_involving(r, c) or self._has_3x3_open_area_involving(r + 1, c):
+                            self._maze[r][c] |= 4
+                            self._maze[r + 1][c] |= 1
 
     def _solve_maze(self) -> None:
         """

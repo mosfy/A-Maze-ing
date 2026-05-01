@@ -22,9 +22,9 @@ class Visualizer():
         self.color_entry = palette[2]
         self.color_exit = palette[3]
 
-        with open("../output.txt", "r") as f:
+        with open("output.txt", "r") as f:
             content = f.read()
-        with open("../output.txt", "r") as f:
+        with open("output.txt", "r") as f:
             content = f.read().strip()
 
         parts = content.split("\n\n")
@@ -87,4 +87,3 @@ class Visualizer():
                 elif self.maze[x][y] == "1":
                     print(self.color_wall + "█" + Color.reset, end="")
             print()
-
