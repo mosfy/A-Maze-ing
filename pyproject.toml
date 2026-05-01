@@ -1,0 +1,12 @@
+[project]
+name = "a-maze-ing"
+version = "0.1.0"
+description = "Générateur et résolveur de labyrinthes"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "strenum>=0.4.15",
+]
+
+[project.scripts]
+a-maze-ing = "srcs.a_maze_ing:main"
