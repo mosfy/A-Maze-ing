@@ -2,59 +2,55 @@ from color_enum import Color
 
 
 class Visualizer():
-    def __init__(self):
-        self.height = 5
-        self.width = 5
+    def __init__(self, palette):
+        self.height = 20
+        self.width = 20
 
         self.maze = []
         for x in range(0, self.height * 2 + 1):
-            arrey = []
+            array = []
             for y in range(0, self.width * 2 + 1):
-                arrey.append("1")
-            self.maze.append(arrey)
-                
+                array.append("1")
+            self.maze.append(array)
+
         self.encoded_maze = []
         self.entry = ()
         self.exit = ()
         self.path = ""
+        self.color_wall = palette[0]
+        self.color_path = palette[1]
+        self.color_entry = palette[2]
+        self.color_exit = palette[3]
 
         with open("../output.txt", "r") as f:
             content = f.read()
-        number_n = 0
-        res = ""
-        coord_entry = tuple()
-        coord_exit = 
-        is_maze = True
-        for char in content:
-            if is_maze:
-                if char == "\n":
-                    number_n += 1
-                else:
-                    number_n = 0
-                if number_n == 2:
-                    is_maze = False
-                res += char
-            else:
-                if char == "\n":
-                    number_n += 1
-                if number_n == 3:
+        with open("../output.txt", "r") as f:
+            content = f.read().strip()
+
+        parts = content.split("\n\n")
+
+        # 1. Maze
+        maze_part = parts[0]
+        self.encoded_maze = maze_part.split("\n")
+
+        # 2. Infos
+        info_part = parts[1].split("\n")
+
+        self.entry = tuple(map(int, info_part[0].split(",")))
+        self.exit = tuple(map(int, info_part[1].split(",")))
+        self.path = info_part[2]
+
+        print("Entry:", self.entry)
+        print("Exit:", self.exit)
+        print("Path:", self.path)
                     
-                
-                
-
-        self.encoded_maze = res.split("\n")
-        self.encoded_maze.pop()
-        print(self.encoded_maze)
-
     def decode_output(self):
         north = ["1", "3", "5", "7", "9", "B", "D", "F"]
         south = ["4", "5", "6", "7", "C", "D", "E", "F"]
         east = ["2", "3", "6", "7", "A", "B", "E", "F"]
         west = ["8", "9", "A", "B", "C", "D", "E", "F"]
-    
         i = 0
         j = 0
-        
         for x in range(1, self.width * 2, 2):
             for y in range(1, self.height * 2, 2):
                 self.maze[y][x] = "0"
@@ -71,16 +67,27 @@ class Visualizer():
                 i += 1
             i = 0
             j += 1
-        # self.maze[5][3] = "ntm"
 
     def print_maze(self):
+        x_entry, y_entry = self.entry
+        x_exit, y_exit = self.exit
+        x_entry = x_entry * 2 + 1
+        y_entry = y_entry * 2 + 1
+        x_exit = x_exit * 2 + 1
+        y_exit = y_exit * 2 + 1
         for x in range(0, self.width * 2+1):
             for y in range(0, self.height * 2+1):
                 if self.maze[x][y] == "0":
-                    print("█", end="")
+                    if x == x_entry and y == y_entry:
+                        print(self.color_entry + "█" + Color.reset, end="")
+                    elif x == x_exit and y == y_exit:
+                        print(self.color_exit + "█" + Color.reset, end="")
+                    else:
+                        print(self.color_path + "█" + Color.reset, end="")
                 elif self.maze[x][y] == "1":
-                    print(Color.black + "█" + Color.reset, end="")
+                    print(self.color_wall + "█" + Color.reset, end="")
             print()
+
 
 if __name__ == "__main__":
     visualizer = Visualizer()
