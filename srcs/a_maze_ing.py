@@ -252,8 +252,10 @@ class MazeGenerator:
 colors = [(Color.black, Color.white, Color.green, Color.red),
           (Color.yellow, Color.blue, Color.pink, Color.purple),
           (Color.dark_green, Color.brown, Color.gray_green, Color.dark_gray),
-          (Color.deep_black, Color.neon_pink, Color.ultra_pink, Color.ultra_pink),
-          (Color.dark_gray, Color.cigarette, Color.dark_brown, Color.dark_brown)]
+          (Color.deep_black, Color.neon_pink, Color.ultra_pink,
+           Color.ultra_pink),
+          (Color.dark_gray, Color.cigarette, Color.dark_brown,
+           Color.dark_brown)]
 
 
 def print_maze(palette):
@@ -282,11 +284,13 @@ def main() -> None:
             print("4. Quit")
             choice = input("choice? (1-4)")
             if choice == "1":
-                generate_print_maze()
+                generate_print_maze(random.choice(colors))
             if choice == "2":
                 pass
             if choice == "3":
                 print_maze(random.choice(colors))
+            if choice == "4":
+                sys.exit()
     except Exception as e:
         print(e)
 

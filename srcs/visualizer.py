@@ -43,7 +43,7 @@ class Visualizer():
         print("Entry:", self.entry)
         print("Exit:", self.exit)
         print("Path:", self.path)
-                    
+
     def decode_output(self):
         north = ["1", "3", "5", "7", "9", "B", "D", "F"]
         south = ["4", "5", "6", "7", "C", "D", "E", "F"]
@@ -88,8 +88,3 @@ class Visualizer():
                     print(self.color_wall + "█" + Color.reset, end="")
             print()
 
-
-if __name__ == "__main__":
-    visualizer = Visualizer()
-    visualizer.decode_output()
-    visualizer.print_maze()
