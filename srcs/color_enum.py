@@ -1,4 +1,4 @@
-from strenum import StrEnum
+from strenum import StrEnum  # type: ignore
 
 
 class Color(StrEnum):

@@ -122,7 +122,7 @@ class MazeGenerator:
             raise FileNotFoundError("Error: file not found")
 
     def _add_42_pattern(self) -> Set[Tuple[int, int]]:
-        pattern_cells = set()
+        pattern_cells: Set[Tuple[int, int]] = set()
         if self._width < 9 or self._height < 7:
             print("Error: Maze size too small to draw '42' pattern.")
             return pattern_cells
@@ -130,13 +130,38 @@ class MazeGenerator:
         start_r = (self._height - 5) // 2
         start_c = (self._width - 7) // 2
 
-        p4 = [(0,0), (0,2), (1,0), (1,2), (2,0), (2,1), (2,2), (3,2), (4,2)]
-        p2 = [(0,4), (0,5), (0,6), (1,6), (2,4), (2,5), (2,6), (3,4), (4,4), (4,5), (4,6)]
+        p4 = [
+            (0, 0),
+            (0, 2),
+            (1, 0),
+            (1, 2),
+            (2, 0),
+            (2, 1),
+            (2, 2),
+            (3, 2),
+            (4, 2)
+        ]
+        p2 = [
+            (0, 4),
+            (0, 5),
+            (0, 6),
+            (1, 6),
+            (2, 4),
+            (2, 5),
+            (2, 6),
+            (3, 4),
+            (4, 4),
+            (4, 5),
+            (4, 6)
+        ]
 
         for r, c in p4 + p2:
             pr, pc = start_r + r, start_c + c
             if (pr, pc) == self._entry or (pr, pc) == self._exit:
-                print("Error: '42' pattern overlaps with ENTRY or EXIT. Omitting pattern.")
+                print(
+                    "Error: '42' pattern overlaps with ENTRY or EXIT. "
+                    "Omitting pattern."
+                )
                 return set()
             pattern_cells.add((pr, pc))
         return pattern_cells
@@ -205,17 +230,21 @@ class MazeGenerator:
                 if (r, c) in self._pattern_42:
                     continue
                 if c < self._width - 1 and (self._maze[r][c] & 2):
-                    if (r, c + 1) not in self._pattern_42 and random.random() < chance:
+                    if ((r, c + 1) not in self._pattern_42 and
+                            random.random() < chance):
                         self._maze[r][c] &= ~2
                         self._maze[r][c + 1] &= ~8
-                        if self._has_3x3_open_area_involving(r, c) or self._has_3x3_open_area_involving(r, c + 1):
+                        if (self._has_3x3_open_area_involving(r, c) or
+                                self._has_3x3_open_area_involving(r, c + 1)):
                             self._maze[r][c] |= 2
                             self._maze[r][c + 1] |= 8
                 if r < self._height - 1 and (self._maze[r][c] & 4):
-                    if (r + 1, c) not in self._pattern_42 and random.random() < chance:
+                    if ((r + 1, c) not in self._pattern_42 and
+                            random.random() < chance):
                         self._maze[r][c] &= ~4
                         self._maze[r + 1][c] &= ~1
-                        if self._has_3x3_open_area_involving(r, c) or self._has_3x3_open_area_involving(r + 1, c):
+                        if (self._has_3x3_open_area_involving(r, c) or
+                                self._has_3x3_open_area_involving(r + 1, c)):
                             self._maze[r][c] |= 4
                             self._maze[r + 1][c] |= 1
 
