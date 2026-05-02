@@ -3,8 +3,8 @@ from color_enum import Color
 
 class Visualizer():
     def __init__(self, palette):
-        self.height = 20
-        self.width = 20
+        self.height = 10
+        self.width = 10
 
         self.maze = []
         for x in range(0, self.height * 2 + 1):
@@ -21,9 +21,8 @@ class Visualizer():
         self.color_path = palette[1]
         self.color_entry = palette[2]
         self.color_exit = palette[3]
+        self.color_solve = palette[4]
 
-        with open("output.txt", "r") as f:
-            content = f.read()
         with open("output.txt", "r") as f:
             content = f.read().strip()
 
@@ -69,6 +68,7 @@ class Visualizer():
             j += 1
 
     def print_maze(self):
+        self.decode_output()
         x_entry, y_entry = self.entry
         x_exit, y_exit = self.exit
         x_entry = x_entry * 2 + 1
@@ -79,9 +79,61 @@ class Visualizer():
             for y in range(0, self.height * 2+1):
                 if self.maze[x][y] == "0":
                     if x == x_entry and y == y_entry:
+                        print(self.color_entry + "██" + Color.reset, end="")
+                    elif x == x_exit and y == y_exit:
+                        print(self.color_exit + "██" + Color.reset, end="")
+                    else:
+                        print(self.color_path + "██" + Color.reset, end="")
+                elif self.maze[x][y] == "1":
+                    print(self.color_wall + "██" + Color.reset, end="")
+            print()
+
+    def print_maze_path(self):
+        self.decode_output()
+        x_entry, y_entry = self.entry
+        x_exit, y_exit = self.exit
+        x_entry = x_entry * 2 + 1
+        y_entry = y_entry * 2 + 1
+        x_exit = x_exit * 2 + 1
+        y_exit = y_exit * 2 + 1
+
+        x = x_entry
+        y = y_entry
+
+        # Construire le chemin
+        path_positions = [(y, x)]
+
+        for direction in self.path:
+            if direction == "N":
+                path_positions.append((y - 1, x))
+                y -= 2
+                path_positions.append((y, x))
+
+            elif direction == "S":
+                path_positions.append((y + 1, x))
+                y += 2
+                path_positions.append((y, x))
+
+            elif direction == "E":
+                path_positions.append((y, x + 1))
+                x += 2
+                path_positions.append((y, x))
+
+            elif direction == "W":
+                path_positions.append((y, x - 1))
+                x -= 2
+                path_positions.append((y, x))
+
+        print(path_positions)
+        for x in range(0, self.width * 2+1):
+            for y in range(0, self.height * 2+1):
+                if self.maze[x][y] == "0":
+                    if x == x_entry and y == y_entry:
                         print(self.color_entry + "█" + Color.reset, end="")
                     elif x == x_exit and y == y_exit:
                         print(self.color_exit + "█" + Color.reset, end="")
+                    elif (x, y) in path_positions:
+                        print(self.color_solve + "█" + Color.reset, end="")
                     else:
                         print(self.color_path + "█" + Color.reset, end="")
                 elif self.maze[x][y] == "1":
