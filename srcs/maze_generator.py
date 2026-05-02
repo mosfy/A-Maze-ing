@@ -188,8 +188,8 @@ class MazeGenerator:
         """
         Génère le labyrinthe par backtracking (DFS).
         """
-        # if self._seed:
-        #     random.seed(self._seed)
+        if self._seed:
+            random.seed(self._seed)
 
         self._pattern_42 = self._add_42_pattern()
 
@@ -309,13 +309,13 @@ class MazeGenerator:
                 raise ValueError(f"Invalid move from {(pr, pc)} to {(r, c)}")
         self._path_str = "".join(dirs)
 
-    def _output_data(self, file_name: str = "output.txt") -> None:
+    def _output_data(self) -> None:
         """
         Cette fonction
         a pour but de sauvegarder les données dans le fichier de sortie
         """
         try:
-            with open(file_name, "w", encoding="utf-8") as file_handle:
+            with open(self._output_file, "w", encoding="utf-8") as file_handle:
                 for line in self._maze:
                     line_hex = [format(i, "X") for i in line]
                     file_handle.write("".join(line_hex) + "\n")
