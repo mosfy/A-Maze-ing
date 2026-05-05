@@ -48,6 +48,9 @@ class MazeGenerator:
 
     def get_height(self) -> int:
         return self._height
+    
+    def get_file_name(self) -> str:
+        return self._output_file
 
     def load_config(self) -> None:
         """
@@ -355,13 +358,13 @@ class MazeGenerator:
                 raise ValueError(f"Invalid move from {(pr, pc)} to {(r, c)}")
         self._path_str = "".join(dirs)
 
-    def _output_data(self, file_name: str = "output.txt") -> None:
+    def _output_data(self) -> None:
         """
         Cette fonction
         a pour but de sauvegarder les données dans le fichier de sortie
         """
         try:
-            with open(file_name, "w", encoding="utf-8") as file_handle:
+            with open(self._output_file, "w", encoding="utf-8") as file_handle:
                 for line in self._maze:
                     line_hex = [format(i, "X") for i in line]
                     file_handle.write("".join(line_hex) + "\n")

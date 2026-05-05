@@ -1,8 +1,8 @@
-from color_enum import Color
+from .color_enum import Color
 
 
 class Visualizer():
-    def __init__(self, palette, width, height):
+    def __init__(self, palette, width, height, file_name):
         self.height = height
         self.width = width
 
@@ -23,7 +23,7 @@ class Visualizer():
         self.color_exit = palette[3]
         self.color_solve = palette[4]
 
-        with open("output.txt", "r") as f:
+        with open(file_name, "r") as f:
             content = f.read().strip()
 
         parts = content.split("\n\n")
