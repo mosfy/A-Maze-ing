@@ -1,0 +1,4 @@
+[flake8]
+# Dossiers à ignorer (séparés par des virgules)
+exclude =
+    .venv

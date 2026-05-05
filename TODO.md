@@ -10,25 +10,26 @@
 ## Jour 2 : Cœur de la Génération
 - [*] **[nadoho]** Implémenter le Recursive Backtracker itératif (avec une stack pour éviter les RecursionError)
 - [*] **[nadoho]** Intégrer le système de seed pour la reproductibilité
-- [ ] **[tfrances]** Premier rendu ASCII simple dans le terminal pour visualiser la grille
-- [ ] **[tfrances]** Système de navigation de base (boucle d'entrée utilisateur)
+- [*] **[tfrances]** Premier rendu ASCII simple dans le terminal pour visualiser la grille
+- [*] **[tfrances]** Système de navigation de base (boucle d'entrée utilisateur)
 
 ## Jour 3 : Algorithmes Spécifiques & Motif 42
 - [*] **[nadoho]** Algorithme de résolution (BFS ou Dijkstra) pour trouver le chemin le plus court
-- [ ] **[tfrances]** Implémenter le motif "42" (marquer les cellules comme bloquées avant la génération)
-- [ ] **[tfrances]** Vérifier la contrainte "pas de zone ouverte 3x3"
-- [ ] **[nadoho]** Conversion du chemin trouvé en format textuel (N, E, S, W)
+- [*] **[tfrances]** Implémenter le motif "42" (marquer les cellules comme bloquées avant la génération)
+- [*] **[tfrances]** Vérifier la contrainte "pas de zone ouverte 3x3"
+- [*] **[nadoho]** Conversion du chemin trouvé en format textuel (N, E, S, W)
 
 ## Jour 4 : Export & Normes de Code
-- [ ] **[nadoho]** Exporter le labyrinthe au format hexadécimal (Bitwise 0-F)
-- [ ] **[nadoho]** Écrire le fichier de sortie conforme au sujet
-- [ ] **[tfrances]** Mise aux normes du code : type hints partout et conformité flake8 / mypy
-- [ ] **[tfrances]** Créer le Makefile (règles install, run, lint, clean)
+- [*] **[nadoho]** Exporter le labyrinthe au format hexadécimal (Bitwise 0-F)
+- [*] **[nadoho]** Écrire le fichier de sortie conforme au sujet
+
 
 ## Jour 5 : Packaging & Documentation
-- [ ] **[nadoho]** Créer les fichiers de packaging (`setup.py` ou `pyproject.toml`) pour générer le `.whl`
+- [*] **[nadoho]** Créer les fichiers de packaging (`setup.py` ou `pyproject.toml`) pour générer le `.whl`
 - [ ] **[nadoho]** Tester l'installation du module `mazegen-*` dans un environnement vierge
-- [ ] **[tfrances]** Rédiger le `README.md`
+- [*] **[tfrances]** Rédiger le `README.md`
 
 ## Jour 6 : Interactivité & Bonus
-- A voir
+- [~] Corrections visualizer en cours (**[tfrances]**)
+- [ ] Finaliser packaging nommé `mazegen-*` (build `.whl` / `.tar.gz`)
+- [ ] Vérification finale complète avant éval

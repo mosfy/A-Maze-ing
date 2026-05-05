@@ -1,8 +1,11 @@
 import sys
 import random
-from maze_generator import MazeGenerator
-from visualizer import Visualizer
-from color_enum import Color
+from pydantic import ValidationError
+from srcs.maze_generator import MazeGenerator
+from srcs.visualizer import Visualizer
+from srcs.color_enum import Color
+from srcs.config_validator import ConfigValidator
+from typing import Any
 
 
 colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
@@ -16,27 +19,43 @@ colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
            Color.dark_brown, Color.yellow)]
 
 
-def print_maze(palette, is_solved):
-    visualizer = Visualizer(palette)
+def print_maze(palette: Any, is_solved: bool, config: ConfigValidator) -> None:
+    visualizer = Visualizer(palette, config)
     if is_solved:
         visualizer.print_maze_path()
     else:
         visualizer.print_maze()
 
 
-def generate_print_maze(palette, is_solved):
-    maze = MazeGenerator()
+def generate_print_maze(
+    palette: Any, is_solved: bool, config: ConfigValidator
+) -> None:
+    maze = MazeGenerator(config)
     maze._maze_generator()
     maze._solve_maze()
     maze.convert()
     maze._output_data()
-    print_maze(palette, is_solved)
+    print_maze(palette, is_solved, config)
+
+
+def load_config() -> ConfigValidator | None:
+    """Charge la config et affiche un message clair en cas d'erreur."""
+    try:
+        return ConfigValidator.from_argv()
+    except (FileNotFoundError, ValueError, ValidationError) as err:
+        print(f"Configuration error: {err}")
+        return None
 
 
 def main() -> None:
+    # Valide et charge la configuration initiale
+    config = load_config()
+    if config is None:
+        return
+
     random_palette = colors[0]
     is_solved = False
-    generate_print_maze(random_palette, is_solved)
+    generate_print_maze(random_palette, is_solved, config)
     try:
         while (True):
             print("===A-Maze-ing===")
@@ -46,16 +65,19 @@ def main() -> None:
             print("4. Quit")
             choice = input("choice? (1-4)")
             if choice == "1":
-                generate_print_maze(random_palette, is_solved)
+                new_config = load_config()
+                if new_config is not None:
+                    config = new_config
+                    generate_print_maze(random_palette, is_solved, config)
             if choice == "2":
                 if is_solved:
                     is_solved = False
                 else:
                     is_solved = True
-                print_maze(random_palette, is_solved)
+                print_maze(random_palette, is_solved, config)
             if choice == "3":
                 random_palette = random.choice(colors)
-                print_maze(random_palette, is_solved)
+                print_maze(random_palette, is_solved, config)
             if choice == "4":
                 sys.exit()
     except Exception as e:

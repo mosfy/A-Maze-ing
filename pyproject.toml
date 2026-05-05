@@ -3,10 +3,15 @@ name = "a-maze-ing"
 version = "0.1.0"
 description = "Générateur et résolveur de labyrinthes"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
+    "flake8>=5.0.4",
+    "mypy>=1.14.1",
     "strenum>=0.4.15",
+    "pydantic>=2.0.0",
 ]
 
-[project.scripts]
-a-maze-ing = "srcs.a_maze_ing:main"
+[tool.mypy]
+exclude = [
+    '.venv/',
+]

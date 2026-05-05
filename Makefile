@@ -13,10 +13,10 @@ install:
 	uv sync
 
 run:
-	uv run python srcs/a_maze_ing.py config.txt
+	uv run python a_maze_ing.py config.txt
 
 debug:
-	uv run python -m pdb srcs/a_maze_ing.py config.txt
+	uv run python -m pdb a_maze_ing.py config.txt
 
 clean:
 	find . -type d -name "__pycache__" -prune -exec rm -rf {} +

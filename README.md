@@ -60,6 +60,17 @@ make lint-strict
 make clean
 ```
 
+### Build package (`mazegen-*`)
+
+```bash
+uv run python -m pip install --upgrade build
+uv run python -m build
+```
+
+Les artefacts générés sont disponibles dans `dist/`:
+- `mazegen-1.0.0.tar.gz`
+- `mazegen-1.0.0-py3-none-any.whl`
+
 ## Configuration file format (`config.txt`)
 
 Clé/valeur au format `KEY=VALUE`, une par ligne.
@@ -118,9 +129,10 @@ Pour la résolution, on utilise **BFS** afin d'obtenir un plus court chemin vali
 
 ## Reusable part
 
-La partie réutilisable est la classe `MazeGenerator` dans `srcs/maze_generator.py`.
+La partie réutilisable est la classe `MazeGenerator` dans `mazegen.py` (fichier unique à la racine, importable dans un autre projet).
 
 Elle permet:
+- d'instancier directement un générateur avec des paramètres custom,
 - de charger une configuration,
 - de générer la structure du labyrinthe,
 - de résoudre le labyrinthe,
@@ -130,16 +142,27 @@ Elle permet:
 Exemple minimal:
 
 ```python
-from srcs.maze_generator import MazeGenerator
+from mazegen import MazeGenerator
 
-maze = MazeGenerator()
-maze._maze_generator()
-maze._solve_maze()
-maze.convert()
-maze._output_data()
+maze = MazeGenerator(width=20, height=12, seed=42, perfect=True)
+maze.generate().solve()
+
+structure = maze.maze
+path_coords = maze.solution_path
+path_moves = maze.solution_moves
+
+maze.write_output("output.txt")
 ```
 
-Note: le packaging dédié `mazegen-*` demandé par le sujet est préparé via `pyproject.toml`, et peut être finalisé/renommé selon la convention d'évaluation.
+Exemple avec fichier de configuration:
+
+```python
+from mazegen import MazeGenerator
+
+maze = MazeGenerator.from_config("config.txt")
+maze.generate().solve()
+print(maze.solution_moves)
+```
 
 ## Team & project management
 
