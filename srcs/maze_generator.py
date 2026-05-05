@@ -39,6 +39,12 @@ class MazeGenerator:
         self._pattern_42: Set[Tuple[int, int]] = set()
         self.load_config()
 
+    def get_width(self) -> int:
+        return self._width
+
+    def get_height(self) -> int:
+        return self._height
+
     def load_config(self) -> None:
         """
         Charge la configuration depuis un fichier (config.txt).
@@ -118,6 +124,12 @@ class MazeGenerator:
 
         except FileNotFoundError:
             raise FileNotFoundError("Error: file not found")
+        
+        try:
+            self._validate_config()
+        except ValueError as e:
+            print(e)
+            sys.exit()
 
     def _add_42_pattern(self) -> Set[Tuple[int, int]]:
         pattern_cells: Set[Tuple[int, int]] = set()
@@ -184,12 +196,42 @@ class MazeGenerator:
                     return True
         return False
 
+    def _validate_config(self) -> None:
+        """
+        Vérifie que les paramètres de configuration sont valides.
+        """
+        if self._width < 2 or self._height < 2:
+            raise ValueError(
+                f"Error: Maze size must be at least 2x2. "
+                f"Got {self._width}x{self._height}."
+            )
+
+        ex, ey = self._entry
+        if not (0 <= ex < self._height and 0 <= ey < self._width):
+            raise ValueError(
+                f"Error: ENTRY {self._entry} is out of bounds "
+                f"(maze is {self._height}x{self._width})."
+            )
+
+        sx, sy = self._exit
+        if not (0 <= sx < self._height and 0 <= sy < self._width):
+            raise ValueError(
+                f"Error: EXIT {self._exit} is out of bounds "
+                f"(maze is {self._height}x{self._width})."
+            )
+ 
+        if self._entry == self._exit:
+            raise ValueError(
+                f"Error: ENTRY and EXIT must be different. "
+                f"Both are {self._entry}."
+            )
+
     def _maze_generator(self) -> None:
         """
         Génère le labyrinthe par backtracking (DFS).
         """
-        # if self._seed:
-        #     random.seed(self._seed)
+        if self._seed:
+            random.seed(self._seed)
 
         self._pattern_42 = self._add_42_pattern()
 

@@ -16,8 +16,8 @@ colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
            Color.dark_brown, Color.yellow)]
 
 
-def print_maze(palette, is_solved):
-    visualizer = Visualizer(palette)
+def print_maze(height, width, palette, is_solved):
+    visualizer = Visualizer(palette, height, width)
     if is_solved:
         visualizer.print_maze_path()
     else:
@@ -26,17 +26,20 @@ def print_maze(palette, is_solved):
 
 def generate_print_maze(palette, is_solved):
     maze = MazeGenerator()
+    height = maze.get_height()
+    width = maze.get_width()
     maze._maze_generator()
     maze._solve_maze()
     maze.convert()
     maze._output_data()
-    print_maze(palette, is_solved)
+    print_maze(width, height, palette, is_solved)
+    return width, height
 
 
 def main() -> None:
     random_palette = colors[0]
     is_solved = False
-    generate_print_maze(random_palette, is_solved)
+    width, height = generate_print_maze(random_palette, is_solved)
     try:
         while (True):
             print("===A-Maze-ing===")
@@ -52,10 +55,10 @@ def main() -> None:
                     is_solved = False
                 else:
                     is_solved = True
-                print_maze(random_palette, is_solved)
+                print_maze(width, height, random_palette, is_solved)
             if choice == "3":
                 random_palette = random.choice(colors)
-                print_maze(random_palette, is_solved)
+                print_maze(width, height, random_palette, is_solved)
             if choice == "4":
                 sys.exit()
     except Exception as e:

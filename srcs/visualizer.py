@@ -2,9 +2,9 @@ from color_enum import Color
 
 
 class Visualizer():
-    def __init__(self, palette):
-        self.height = 10
-        self.width = 10
+    def __init__(self, palette, width, height):
+        self.height = height
+        self.width = width
 
         self.maze = []
         for x in range(0, self.height * 2 + 1):
@@ -48,43 +48,44 @@ class Visualizer():
         south = ["4", "5", "6", "7", "C", "D", "E", "F"]
         east = ["2", "3", "6", "7", "A", "B", "E", "F"]
         west = ["8", "9", "A", "B", "C", "D", "E", "F"]
-        i = 0
-        j = 0
-        for x in range(1, self.width * 2, 2):
-            for y in range(1, self.height * 2, 2):
+
+        for j in range(0, self.width):
+            for i in range(0, self.height):
+                x = j * 2 + 1
+                y = i * 2 + 1
+
                 self.maze[y][x] = "0"
-                # print(f"{j},{i}: {self.encoded_maze[i][j]}")
+
                 if self.encoded_maze[i][j] not in north:
-                    self.maze[y-1][x] = "0"
+                    self.maze[y - 1][x] = "0"
                 if self.encoded_maze[i][j] not in south:
-                    self.maze[y+1][x] = "0"
+                    self.maze[y + 1][x] = "0"
                 if self.encoded_maze[i][j] not in east:
-                    self.maze[y][x+1] = "0"
+                    self.maze[y][x + 1] = "0"
                 if self.encoded_maze[i][j] not in west:
-                    self.maze[y][x-1] = "0"
-                # print(f"{x}, {y}")
-                i += 1
-            i = 0
-            j += 1
+                    self.maze[y][x - 1] = "0"
 
     def print_maze(self):
         self.decode_output()
         x_entry, y_entry = self.entry
         x_exit, y_exit = self.exit
-        x_entry = x_entry * 2 + 1
-        y_entry = y_entry * 2 + 1
-        x_exit = x_exit * 2 + 1
-        y_exit = y_exit * 2 + 1
-        for x in range(0, self.width * 2+1):
-            for y in range(0, self.height * 2+1):
-                if self.maze[x][y] == "0":
-                    if x == x_entry and y == y_entry:
+
+        # Convertir les coordonnées logiques en coordonnées maze
+        col_entry = x_entry * 2 + 1
+        row_entry = y_entry * 2 + 1
+        col_exit = x_exit * 2 + 1
+        row_exit = y_exit * 2 + 1
+
+        for row in range(0, self.height * 2 + 1):
+            for col in range(0, self.width * 2 + 1):
+                if self.maze[row][col] == "0":
+                    if row == row_entry and col == col_entry:
                         print(self.color_entry + "██" + Color.reset, end="")
-                    elif x == x_exit and y == y_exit:
+                    elif row == row_exit and col == col_exit:
                         print(self.color_exit + "██" + Color.reset, end="")
                     else:
                         print(self.color_path + "██" + Color.reset, end="")
-                elif self.maze[x][y] == "1":
+                elif self.maze[row][col] == "1":
                     print(self.color_wall + "██" + Color.reset, end="")
             print()
 
@@ -92,50 +93,51 @@ class Visualizer():
         self.decode_output()
         x_entry, y_entry = self.entry
         x_exit, y_exit = self.exit
-        x_entry = x_entry * 2 + 1
-        y_entry = y_entry * 2 + 1
-        x_exit = x_exit * 2 + 1
-        y_exit = y_exit * 2 + 1
 
-        x = x_entry
-        y = y_entry
+        # Convertir les coordonnées logiques en coordonnées maze
+        col_entry = x_entry * 2 + 1
+        row_entry = y_entry * 2 + 1
+        col_exit = x_exit * 2 + 1
+        row_exit = y_exit * 2 + 1
+
+        col = col_entry
+        row = row_entry
 
         # Construire le chemin
-        path_positions = [(y, x)]
+        path_positions = [(row, col)]
 
         for direction in self.path:
             if direction == "N":
-                path_positions.append((y - 1, x))
-                y -= 2
-                path_positions.append((y, x))
+                path_positions.append((row - 1, col))
+                row -= 2
+                path_positions.append((row, col))
 
             elif direction == "S":
-                path_positions.append((y + 1, x))
-                y += 2
-                path_positions.append((y, x))
+                path_positions.append((row + 1, col))
+                row += 2
+                path_positions.append((row, col))
 
             elif direction == "E":
-                path_positions.append((y, x + 1))
-                x += 2
-                path_positions.append((y, x))
+                path_positions.append((row, col + 1))
+                col += 2
+                path_positions.append((row, col))
 
             elif direction == "W":
-                path_positions.append((y, x - 1))
-                x -= 2
-                path_positions.append((y, x))
+                path_positions.append((row, col - 1))
+                col -= 2
+                path_positions.append((row, col))
 
-        print(path_positions)
-        for x in range(0, self.width * 2+1):
-            for y in range(0, self.height * 2+1):
-                if self.maze[x][y] == "0":
-                    if x == x_entry and y == y_entry:
-                        print(self.color_entry + "█" + Color.reset, end="")
-                    elif x == x_exit and y == y_exit:
-                        print(self.color_exit + "█" + Color.reset, end="")
-                    elif (x, y) in path_positions:
-                        print(self.color_solve + "█" + Color.reset, end="")
+        for row in range(0, self.height * 2 + 1):
+            for col in range(0, self.width * 2 + 1):
+                if self.maze[row][col] == "0":
+                    if row == row_entry and col == col_entry:
+                        print(self.color_entry + "██" + Color.reset, end="")
+                    elif row == row_exit and col == col_exit:
+                        print(self.color_exit + "██" + Color.reset, end="")
+                    elif (row, col) in path_positions:
+                        print(self.color_solve + "██" + Color.reset, end="")
                     else:
-                        print(self.color_path + "█" + Color.reset, end="")
-                elif self.maze[x][y] == "1":
-                    print(self.color_wall + "█" + Color.reset, end="")
+                        print(self.color_path + "██" + Color.reset, end="")
+                elif self.maze[row][col] == "1":
+                    print(self.color_wall + "██" + Color.reset, end="")
             print()
