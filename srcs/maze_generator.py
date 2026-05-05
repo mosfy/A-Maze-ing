@@ -37,7 +37,11 @@ class MazeGenerator:
             "PERFECT",
         }
         self._pattern_42: Set[Tuple[int, int]] = set()
-        self.load_config()
+        try:
+            self.load_config()
+        except Exception as e:
+            print(e)
+            sys.exit()
 
     def get_width(self) -> int:
         return self._width
