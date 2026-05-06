@@ -32,3 +32,6 @@ lint:
 lint-strict:
 	uv run flake8 .
 	uv run mypy . --strict
+
+build:
+	uv run python -m build --wheel
