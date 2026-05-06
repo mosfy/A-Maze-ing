@@ -3,6 +3,7 @@ import random
 from .maze_generator import MazeGenerator
 from .visualizer import Visualizer
 from .color_enum import Color
+from typing import Tuple
 
 
 colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
@@ -16,15 +17,24 @@ colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
            Color.dark_brown, Color.yellow)]
 
 
-def print_maze(height, width, palette, is_solved, file_name):
-    visualizer = Visualizer(palette, height, width, file_name)
+def print_maze(
+            height: int,
+            width: int,
+            palette: Tuple[Color, ...],
+            is_solved: bool,
+            file_name: str
+        ) -> None:
+    visualizer = Visualizer(list(palette), height, width, file_name)
     if is_solved:
         visualizer.print_maze_path()
     else:
         visualizer.print_maze()
 
 
-def generate_print_maze(palette, is_solved):
+def generate_print_maze(
+            palette: Tuple[Color, ...],
+            is_solved: bool
+        ) -> Tuple[int, int, str]:
     maze = MazeGenerator()
     height = maze.get_height()
     width = maze.get_width()
@@ -50,7 +60,9 @@ def main() -> None:
             print("4. Quit")
             choice = input("choice? (1-4)")
             if choice == "1":
-                width, height, file_name = generate_print_maze(random_palette, is_solved)
+                width, height, file_name = generate_print_maze(
+                        random_palette, is_solved
+                    )
             if choice == "2":
                 if is_solved:
                     is_solved = False

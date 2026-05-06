@@ -48,7 +48,7 @@ class MazeGenerator:
 
     def get_height(self) -> int:
         return self._height
-    
+
     def get_file_name(self) -> str:
         return self._output_file
 
@@ -131,7 +131,7 @@ class MazeGenerator:
 
         except FileNotFoundError:
             raise FileNotFoundError("Error: file not found")
-        
+
         try:
             self._validate_config()
         except ValueError as e:
@@ -226,7 +226,7 @@ class MazeGenerator:
                 f"Error: EXIT {self._exit} is out of bounds "
                 f"(maze is {self._height}x{self._width})."
             )
- 
+
         if self._entry == self._exit:
             raise ValueError(
                 f"Error: ENTRY and EXIT must be different. "
@@ -247,7 +247,7 @@ class MazeGenerator:
 
         while stack:
             current_x, current_y = stack[-1]
-            neighbors: List = []
+            neighbors: List[Tuple[int, int, int, int]] = []
             for (offsets, bit_current, bit_neighbor) in \
                     self._DIRECTIONS.values():
                 dx, dy = offsets

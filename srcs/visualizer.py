@@ -1,8 +1,15 @@
 from .color_enum import Color
+from typing import List, Tuple
 
 
 class Visualizer():
-    def __init__(self, palette, width, height, file_name):
+    def __init__(
+            self,
+            palette: List[str],
+            width: int,
+            height: int,
+            file_name: str
+                ) -> None:
         self.height = height
         self.width = width
 
@@ -13,10 +20,10 @@ class Visualizer():
                 array.append("1")
             self.maze.append(array)
 
-        self.encoded_maze = []
-        self.entry = ()
-        self.exit = ()
-        self.path = ""
+        self.encoded_maze: List[str] = []
+        self.entry: Tuple[int, int] = (0, 0)
+        self.exit: Tuple[int, int] = (0, 0)
+        self.path: str = ""
         self.color_wall = palette[0]
         self.color_path = palette[1]
         self.color_entry = palette[2]
@@ -35,15 +42,18 @@ class Visualizer():
         # 2. Infos
         info_part = parts[1].split("\n")
 
-        self.entry = tuple(map(int, info_part[0].split(",")))
-        self.exit = tuple(map(int, info_part[1].split(",")))
+        x_entry_str, y_entry_str = info_part[0].split(",")
+        self.entry = (int(x_entry_str), int(y_entry_str))
+
+        x_exit_str, y_exit_str = info_part[1].split(",")
+        self.exit = (int(x_exit_str), int(y_exit_str))
         self.path = info_part[2]
 
         print("Entry:", self.entry)
         print("Exit:", self.exit)
         print("Path:", self.path)
 
-    def decode_output(self):
+    def decode_output(self) -> None:
         north = ["1", "3", "5", "7", "9", "B", "D", "F"]
         south = ["4", "5", "6", "7", "C", "D", "E", "F"]
         east = ["2", "3", "6", "7", "A", "B", "E", "F"]
@@ -65,7 +75,7 @@ class Visualizer():
                 if self.encoded_maze[i][j] not in west:
                     self.maze[y][x - 1] = "0"
 
-    def print_maze(self):
+    def print_maze(self) -> None:
         self.decode_output()
         x_entry, y_entry = self.entry
         x_exit, y_exit = self.exit
@@ -89,7 +99,7 @@ class Visualizer():
                     print(self.color_wall + "██" + Color.reset, end="")
             print()
 
-    def print_maze_path(self):
+    def print_maze_path(self) -> None:
         self.decode_output()
         x_entry, y_entry = self.entry
         x_exit, y_exit = self.exit
