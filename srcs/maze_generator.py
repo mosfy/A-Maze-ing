@@ -37,7 +37,20 @@ class MazeGenerator:
             "PERFECT",
         }
         self._pattern_42: Set[Tuple[int, int]] = set()
-        self.load_config()
+        try:
+            self.load_config()
+        except Exception as e:
+            print(e)
+            sys.exit()
+
+    def get_width(self) -> int:
+        return self._width
+
+    def get_height(self) -> int:
+        return self._height
+    
+    def get_file_name(self) -> str:
+        return self._output_file
 
     def load_config(self) -> None:
         """
@@ -118,6 +131,12 @@ class MazeGenerator:
 
         except FileNotFoundError:
             raise FileNotFoundError("Error: file not found")
+        
+        try:
+            self._validate_config()
+        except ValueError as e:
+            print(e)
+            sys.exit()
 
     def _add_42_pattern(self) -> Set[Tuple[int, int]]:
         pattern_cells: Set[Tuple[int, int]] = set()
@@ -183,6 +202,36 @@ class MazeGenerator:
                 if self._is_3x3_open_area_at(i, j):
                     return True
         return False
+
+    def _validate_config(self) -> None:
+        """
+        Vérifie que les paramètres de configuration sont valides.
+        """
+        if self._width < 2 or self._height < 2:
+            raise ValueError(
+                f"Error: Maze size must be at least 2x2. "
+                f"Got {self._width}x{self._height}."
+            )
+
+        ex, ey = self._entry
+        if not (0 <= ex < self._height and 0 <= ey < self._width):
+            raise ValueError(
+                f"Error: ENTRY {self._entry} is out of bounds "
+                f"(maze is {self._height}x{self._width})."
+            )
+
+        sx, sy = self._exit
+        if not (0 <= sx < self._height and 0 <= sy < self._width):
+            raise ValueError(
+                f"Error: EXIT {self._exit} is out of bounds "
+                f"(maze is {self._height}x{self._width})."
+            )
+ 
+        if self._entry == self._exit:
+            raise ValueError(
+                f"Error: ENTRY and EXIT must be different. "
+                f"Both are {self._entry}."
+            )
 
     def _maze_generator(self) -> None:
         """

@@ -1,8 +1,8 @@
 import sys
 import random
-from maze_generator import MazeGenerator
-from visualizer import Visualizer
-from color_enum import Color
+from .maze_generator import MazeGenerator
+from .visualizer import Visualizer
+from .color_enum import Color
 
 
 colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
@@ -16,8 +16,8 @@ colors = [(Color.black, Color.white, Color.green, Color.red, Color.yellow),
            Color.dark_brown, Color.yellow)]
 
 
-def print_maze(palette, is_solved):
-    visualizer = Visualizer(palette)
+def print_maze(height, width, palette, is_solved, file_name):
+    visualizer = Visualizer(palette, height, width, file_name)
     if is_solved:
         visualizer.print_maze_path()
     else:
@@ -26,17 +26,21 @@ def print_maze(palette, is_solved):
 
 def generate_print_maze(palette, is_solved):
     maze = MazeGenerator()
+    height = maze.get_height()
+    width = maze.get_width()
+    file_name = maze.get_file_name()
     maze._maze_generator()
     maze._solve_maze()
     maze.convert()
     maze._output_data()
-    print_maze(palette, is_solved)
+    print_maze(width, height, palette, is_solved, file_name)
+    return width, height, file_name
 
 
 def main() -> None:
     random_palette = colors[0]
     is_solved = False
-    generate_print_maze(random_palette, is_solved)
+    width, height, file_name = generate_print_maze(random_palette, is_solved)
     try:
         while (True):
             print("===A-Maze-ing===")
@@ -46,16 +50,16 @@ def main() -> None:
             print("4. Quit")
             choice = input("choice? (1-4)")
             if choice == "1":
-                generate_print_maze(random_palette, is_solved)
+                width, height, file_name = generate_print_maze(random_palette, is_solved)
             if choice == "2":
                 if is_solved:
                     is_solved = False
                 else:
                     is_solved = True
-                print_maze(random_palette, is_solved)
+                print_maze(width, height, random_palette, is_solved, file_name)
             if choice == "3":
                 random_palette = random.choice(colors)
-                print_maze(random_palette, is_solved)
+                print_maze(width, height, random_palette, is_solved, file_name)
             if choice == "4":
                 sys.exit()
     except Exception as e:
