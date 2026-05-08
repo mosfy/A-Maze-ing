@@ -81,10 +81,10 @@ class Visualizer():
         x_exit, y_exit = self.exit
 
         # Convertir les coordonnées logiques en coordonnées maze
-        col_entry = x_entry * 2 + 1
-        row_entry = y_entry * 2 + 1
-        col_exit = x_exit * 2 + 1
-        row_exit = y_exit * 2 + 1
+        row_entry = x_entry * 2 + 1
+        col_entry = y_entry * 2 + 1
+        row_exit = x_exit * 2 + 1
+        col_exit = y_exit * 2 + 1
 
         for row in range(0, self.height * 2 + 1):
             for col in range(0, self.width * 2 + 1):
@@ -105,10 +105,10 @@ class Visualizer():
         x_exit, y_exit = self.exit
 
         # Convertir les coordonnées logiques en coordonnées maze
-        col_entry = x_entry * 2 + 1
-        row_entry = y_entry * 2 + 1
-        col_exit = x_exit * 2 + 1
-        row_exit = y_exit * 2 + 1
+        row_entry = x_entry * 2 + 1
+        col_entry = y_entry * 2 + 1
+        row_exit = x_exit * 2 + 1
+        col_exit = y_exit * 2 + 1
 
         col = col_entry
         row = row_entry
